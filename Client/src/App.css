@@ -1,0 +1,43 @@
+.Footer{
+  bottom: 0;
+  color: #898989;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Set CodeMirror size and border */
+.CodeMirror {
+  min-height:  calc(100vh - 20px);
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  background-color: #282a36; /* Match Dracula theme */
+  color: #f8f8f2;
+}
+
+/* Style the cursor */
+.CodeMirror-cursor {
+  border-left: 2px solid #f8f8f2 !important;
+}
+
+/* Line number styling */
+.CodeMirror-gutters {
+  background: #282a36;
+  border-right: 1px solid #44475a;
+}
+
+.CodeMirror-linenumber {
+  color: #6272a4;
+}
+
+/* Highlight the active line */
+.CodeMirror-activeline-background {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Matching brackets */
+.CodeMirror-matchingbracket {
+  color: #50fa7b !important;
+  font-weight: bold;
+}

@@ -1,0 +1,14 @@
+#realTimeCodeEditor {
+    width: 100%;
+    height: 300px;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #282a36; /* Dracula background */
+    color: #f8f8f2; /* Text color */
+  }
+  
+  .component-container{
+    width: 100%;
+  }
