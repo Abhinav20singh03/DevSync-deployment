@@ -15,21 +15,19 @@ const server = http.createServer(app);
 
 app.use(cors({ origin: "*", credentials: true }));
 
-// ✅ Fix Content Security Policy (CSP)
-app.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", "default-src *; font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;");
-    next();
-});
+// ✅ Fix Static File Serving
+const buildPath = path.resolve(__dirname, "./Client/dist"); // FIXED PATH
+console.log("Serving frontend from:", buildPath);
 
-// ✅ Serve Frontend Build
-const buildPath = path.resolve(__dirname, "Client", "dist");
 app.use(express.static(buildPath));
 
-// ✅ Redirect all unknown routes to index.html
 app.get("*", (req, res) => {
-    res.sendFile(path.join(buildPath, "index.html"));
+    const indexPath = path.join(buildPath, "index.html");
+    console.log("Serving index.html from:", indexPath); // Debugging log
+    res.sendFile(indexPath);
 });
 
+// ✅ WebSocket Handling
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -47,6 +45,7 @@ io.on("connection", (socket) => {
   });
 });
 
+// ✅ Start Server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
