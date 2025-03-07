@@ -4,13 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-  "start": "npm run build && node server.js",
-  "build": "npm install && npm run build",
-  "dev": "vite",
-  "render-build": "npm install && npm run build",
+  "build": "cd Client && npm install && npm run build", 
+  "start": "node server.js",
+  "dev": "cd Client && npm run dev",
   "server:dev": "nodemon server.js",
-  "server:prod": "node server.js"
-},
+  "server:prod": "node server.js",
+  "render-build": "npm run build"
+}
+,
   "dependencies": {
     "codemirror": "^5.65.18",
     "dotenv": "^16.4.7",
