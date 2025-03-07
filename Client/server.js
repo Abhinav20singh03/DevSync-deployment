@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 });
 
 // ✅ Serve Frontend Build
-const buildPath = path.join(__dirname, "Client", "dist");
+const buildPath = path.resolve(__dirname, "Client", "dist");
 app.use(express.static(buildPath));
 
 // ✅ Redirect all unknown routes to index.html
