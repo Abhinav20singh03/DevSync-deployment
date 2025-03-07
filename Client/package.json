@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-   "start": "npm run build && node server.js",
+  "start": "npm run build && node server.js",
   "build": "cd Client && npm install && npm run build",
   "dev": "vite",
   "render-build": "npm install && npm run build",
