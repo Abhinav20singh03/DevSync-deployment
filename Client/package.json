@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-  "start": "node server.js",
-  "build": "vite build",
+   "start": "npm run build && node server.js",
+  "build": "cd frontend && npm install && npm run build",
   "dev": "vite",
   "render-build": "npm install && npm run build",
   "server:dev": "nodemon server.js",
