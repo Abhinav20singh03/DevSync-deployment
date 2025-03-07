@@ -3,13 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
+"scripts": {
   "build": "npm install && npm run build", 
   "start": "node server.js",
-  "dev": "cd Client && npm run dev",
+  "dev": "vite",
   "server:dev": "nodemon server.js",
-  "server:prod": "node server.js",
-  "render-build": "npm run build"
+  "server:prod": "node server.js"
 }
 ,
   "dependencies": {
