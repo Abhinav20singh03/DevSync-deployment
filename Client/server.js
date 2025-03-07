@@ -7,17 +7,16 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 dotenv.config();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 const server = http.createServer(app);
 
 app.use(cors({ origin: "*", credentials: true }));
 
-// ✅ Fix Static File Serving
-const buildPath = path.resolve(__dirname, "./Client/dist"); // FIXED PATH
-console.log("Serving frontend from:", buildPath);
+const __dirname = path.resolve();
+
+const buildPath = path.join(__dirname, "dist");
+
 
 app.use(express.static(buildPath));
 
