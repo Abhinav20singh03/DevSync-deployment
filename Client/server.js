@@ -1,51 +1,71 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
-import dotenv from "dotenv";
-import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
+import dotenv from "dotenv"; 
+import ACTIONS from "./src/actions.js";
 
-dotenv.config();
+dotenv.config(); // Load environment variables
 
 const app = express();
 const server = http.createServer(app);
+const io = new Server(server);
 
-app.use(cors({ origin: "*", credentials: true }));
-
-const __dirname = path.resolve();
-
-const buildPath = path.join(__dirname, "dist");
+const PORT = process.env.PORT || 3000;
 
 
-app.use(express.static(buildPath));
+const userSocketMap = {};
 
-app.get("*", (req, res) => {
-    const indexPath = path.join(buildPath, "index.html");
-    console.log("Serving index.html from:", indexPath); // Debugging log
-    res.sendFile(indexPath);
-});
-
-// ✅ WebSocket Handling
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-  transports: ["websocket", "polling"],
-});
+function getAllConnectedClients(roomId){
+    return Array.from(io.sockets.adapter.rooms.get(roomId)||[]).map((socketid)=>{
+        return {
+            socketid,
+            username : userSocketMap[socketid],
+        };
+    });
+}
 
 io.on("connection", (socket) => {
-  console.log(`✅ WebSocket Connected: ${socket.id}`);
+    console.log("Socket connected:", socket.id);
+    console.log(socket.rooms)
+    socket.on(ACTIONS.JOIN,({roomId,username})=>{
+        userSocketMap[socket.id] = username;
+        socket.join(roomId);
+        const client = getAllConnectedClients(roomId);
+        console.log(client);
+        client.forEach(({socketid})=>{
+            io.to(socketid).emit(ACTIONS.JOINED,{
+                client,
+                username:username,
+                socketid:socket.id
+            });
+        });
+    });
 
-  socket.on("disconnect", () => {
-    console.log(`❌ User Disconnected: ${socket.id}`);
-  });
+
+    socket.on(ACTIONS.CODE_CHANGE,({roomId,code})=>{
+        socket.in(roomId).emit(ACTIONS.CODE_CHANGE,{code})
+      });
+
+    socket.on(ACTIONS.SYNC_CODE,({socketid,code})=>{
+        io.to(socketid).emit(ACTIONS.CODE_CHANGE,{code})
+    });
+
+
+    socket.on("disconnecting",()=>{
+        const rooms = [...socket.rooms];
+        rooms.forEach((roomId)=>{
+            socket.in(roomId).emit(ACTIONS.DISCONNECTED,{
+                socketid:socket.id,
+                username: userSocketMap[socket.id]
+            });
+        });
+        delete userSocketMap[socket.id];
+        socket.leave();
+    });
+
+
 });
 
-// ✅ Start Server
-const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`App is listening on port ${PORT}`);
 });
