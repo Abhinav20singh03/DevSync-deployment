@@ -1,0 +1,25 @@
+.output-box{
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 165px;
+    font-size:medium;
+    background-color:#212121 ;
+   overflow-y: scroll;
+}
+.run{
+    background-color: rgb(0, 124, 176);
+    font-family: Poppins;
+    color: white;
+    padding: 7px 15px;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    gap: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    
+}

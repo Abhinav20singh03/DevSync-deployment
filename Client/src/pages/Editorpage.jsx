@@ -116,7 +116,7 @@ const EditorPage = () => {
           <img className="profile-logo" src={devsynclogo} alt="DevSync Logo" />
         </div>
         <div className="mid-section">
-          <div>Connected</div>
+          <div className='connect'>Connected</div>
           <div className="profiles">
             {clients.map((ele) => (
               <Clients key={ele.socketid} username={ele.username}/>
@@ -128,7 +128,10 @@ const EditorPage = () => {
           <button className="leave-button" onClick={leaveRoom}>Leave</button>
         </div>
       </aside>
-      <div className="editor-side"><Editor socketRef={socketRef} roomId={roomId} onCodeChange={onCodeChange}/></div>
+      <div className="editor-side">
+        
+        <Editor socketRef={socketRef} roomId={roomId} onCodeChange={onCodeChange}/>
+        </div>
     </div>
   );
 };
