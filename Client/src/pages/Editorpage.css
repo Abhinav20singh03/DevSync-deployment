@@ -87,6 +87,8 @@
 }
 .connect{
   font-size: 14px;
+  gap: 10px;
+  font-weight: 500;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -101,10 +103,10 @@
   }
 
   .profile-side {
-      width: 100%;
-      padding: 15px;
-      flex: 1;
-      overflow-y: auto; /* Prevent content from pushing buttons out */
+       width: 20vw;
+    min-width: 180px;
+    max-width: 250px;
+    padding: 1%;
   }
 
   .profiles {
@@ -148,10 +150,8 @@
       font-size: 14px;
   }
 
-  .copy-button,
-  .leave-button {
-      width: 100%;
-      font-size: 12px;
-      padding: 10px;
-  }
+  .copy-button, .leave-button {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+}
 }

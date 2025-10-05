@@ -1,12 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { materialDark } from '@fsegurai/codemirror-theme-material-dark';
 import { GrPowerReset } from "react-icons/gr";
 import { FaCopy } from "react-icons/fa6";
 import Codemirror from "codemirror";
 import "codemirror/lib/codemirror.css";
-import "codemirror/theme/dracula.css";
-import "codemirror/theme/material-darker.css"; // material theme CSS
-
+import "codemirror/theme/material-darker.css";
 import "codemirror/mode/javascript/javascript";
 import "codemirror/addon/edit/closetag.js";
 import "codemirror/addon/edit/closebrackets.js";
@@ -15,13 +12,49 @@ import ACTIONS from "../actions";
 import Output from "./Output";
 
 const Editor = ({ socketRef, roomId, onCodeChange }) => {
-    const [language,setLanguage] = useState(50);
+  const [language, setLanguage] = useState(63); // default JavaScript
   const editorRef = useRef(null);
   const textareaRef = useRef(null);
   const [codehere, setCode] = useState("");
 
+  // 🧩 Templates with "Write your code here" and "Hello DevSync"
+  const templates = {
+    50: `#include <stdio.h>\n\nint main() {\n    printf("Hello DevSync\\n");\n    // Write your code here\n    return 0;\n}`,
+    54: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello DevSync" << endl;\n    // Write your code here\n    return 0;\n}`,
+    62: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello DevSync");\n        // Write your code here\n    }\n}`,
+    71: `print("Hello DevSync")\n# Write your code here`,
+    63: `console.log("Hello DevSync");\n// Write your code here`,
+    74: `console.log("Hello DevSync");\n// Write your code here`,
+    68: `<?php\n echo "Hello DevSync";\n // Write your code here\n?>`,
+    46: `#!/bin/bash\n echo "Hello DevSync"\n # Write your code here`,
+    51: `using System;\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello DevSync");\n        // Write your code here\n    }\n}`,
+    60: `package main\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello DevSync")\n    // Write your code here\n}`,
+    78: `fun main() {\n    println("Hello DevSync")\n    // Write your code here\n}`,
+    83: `import Foundation\n\nprint("Hello DevSync")\n// Write your code here`,
+    72: `puts "Hello DevSync"\n# Write your code here`,
+    73: `fn main() {\n    println!("Hello DevSync");\n    // Write your code here\n}`,
+    80: `print("Hello DevSync")\n# Write your code here`,
+    81: `object Main extends App {\n    println("Hello DevSync")\n    // Write your code here\n}`,
+    82: `-- Write your SQL code here\nSELECT 'Hello DevSync';`,
+    85: `void main() {\n  print("Hello DevSync");\n  // Write your code here\n}`,
+    64: `print("Hello DevSync")\n-- Write your code here`,
+    61: `main = do\n  putStrLn "Hello DevSync"\n  -- Write your code here`,
+    45: `section .data\n    msg db 'Hello DevSync',0Ah\nsection .text\n    global _start\n_start:\n    ; Write your code here`,
+  };
+
+  // 🔹 Initialize CodeMirror
   useEffect(() => {
-    // Initialize CodeMirror only once
+  if (socketRef.current) {
+    socketRef.current.on(ACTIONS.LANGUAGE_CHANGE, ({ language }) => {
+      setLanguage(language);
+    });
+  }
+
+  return () => {
+    socketRef.current.off(ACTIONS.LANGUAGE_CHANGE);
+  };
+}, [socketRef.current]);
+  useEffect(() => {
     if (textareaRef.current && !editorRef.current) {
       editorRef.current = Codemirror.fromTextArea(textareaRef.current, {
         mode: { name: "javascript", json: true },
@@ -31,7 +64,8 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
         lineNumbers: true,
       });
 
-      // Listen for changes in the editor
+      editorRef.current.setValue(templates[language] || "// Write your code here");
+
       editorRef.current.on("change", (instance, change) => {
         const { origin } = change;
         const code = instance.getValue();
@@ -48,6 +82,15 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
     }
   }, []);
 
+  // 🔹 Update editor when language changes
+  useEffect(() => {
+    if (editorRef.current) {
+      const newTemplate = templates[language] || "// Write your code here";
+      editorRef.current.setValue(newTemplate);
+    }
+  }, [language]);
+
+  // 🔹 Sync code in real time
   useEffect(() => {
     if (socketRef.current) {
       socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
@@ -65,12 +108,20 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
   return (
     <div className="component-container">
       <div className="navbar">
-        <select id="language" name="language" 
-        onChange={(ele)=>{
-            const lang = ele.target.value;
-            const langcode = parseInt(lang, 10);
-            setLanguage(langcode);
-        }}>
+        <select
+  id="language"
+  name="language"
+  value={language}
+  onChange={(e) => {
+    const newLanguage = parseInt(e.target.value, 10);
+    setLanguage(newLanguage);
+
+    socketRef.current.emit(ACTIONS.LANGUAGE_CHANGE, {
+      roomId,
+      language: newLanguage
+    });
+  }}
+>
           <option value="50">C (11.1.0)</option>
           <option value="54">C++ (11.1.0)</option>
           <option value="62">Java (17.0.1)</option>
@@ -93,19 +144,31 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
           <option value="45">Assembly (NASM 2.15.05)</option>
           <option value="61">Haskell (9.0.1)</option>
         </select>
+
         <div className="settings">
-            <button className="navbutton">
-            <FaCopy size={20}/>
-        </button>
-        <button className="navbutton">
+          <button
+            className="navbutton"
+            onClick={() => {
+              navigator.clipboard.writeText(editorRef.current.getValue());
+              alert("✅ Code copied to clipboard!");
+            }}
+          >
+            <FaCopy size={20} />
+          </button>
+
+          <button
+            className="navbutton"
+            onClick={() => {
+              const resetCode = templates[language] || "// Write your code here";
+              editorRef.current.setValue(resetCode);
+            }}
+          >
             <GrPowerReset size={20} />
-        </button>
+          </button>
         </div>
-        
       </div>
 
       <textarea ref={textareaRef} id="realTimeCodeEditor"></textarea>
-
       <Output code={codehere} languageId={language} />
     </div>
   );

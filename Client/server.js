@@ -50,6 +50,10 @@ io.on("connection", (socket) => {
         io.to(socketid).emit(ACTIONS.CODE_CHANGE,{code})
     });
 
+    socket.on(ACTIONS.LANGUAGE_CHANGE, ({ roomId, language }) => {
+  socket.to(roomId).emit(ACTIONS.LANGUAGE_CHANGE, { language });
+});
+
 
     socket.on("disconnecting",()=>{
         const rooms = [...socket.rooms];

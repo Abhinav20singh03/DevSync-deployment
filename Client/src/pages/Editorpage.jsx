@@ -8,6 +8,7 @@ import { initSocket } from '../socket';
 import { toast } from 'react-toastify';
 import { useNavigate ,Navigate} from 'react-router-dom';
 import ACTIONS from '../actions.js';
+import { PiUsersThreeFill } from "react-icons/pi";
 
 const EditorPage = () => {
   const location = useLocation();
@@ -116,7 +117,10 @@ const EditorPage = () => {
           <img className="profile-logo" src={devsynclogo} alt="DevSync Logo" />
         </div>
         <div className="mid-section">
-          <div className='connect'>Connected</div>
+          <div className='connect'>
+            Currently Online
+            <PiUsersThreeFill size={20} color='#32CD32' />
+            </div>
           <div className="profiles">
             {clients.map((ele) => (
               <Clients key={ele.socketid} username={ele.username}/>

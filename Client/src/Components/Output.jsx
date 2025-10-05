@@ -71,7 +71,8 @@ const Output = ({ code, languageId }) => {
 
   return (
     <div className="output-box">
-      <button
+      <div className="output-feature">
+         <button
         onClick={runCode}
         disabled={loading}
         className="run"
@@ -82,6 +83,13 @@ const Output = ({ code, languageId }) => {
         </div>
        
       </button>
+      <div>
+        <button className="run" onClick={()=>{setOutput("")}}>
+          Clear
+        </button>
+      </div>
+      </div>
+     
 
       <div>
         <pre >{output}</pre>

@@ -1,6 +1,7 @@
 #realTimeCodeEditor {
     width: 100%;
-    height: 300px;
+    font-size: 1rem;
+    height: 60vh;
     font-size: 16px;
     padding: 10px;
     border-radius: 5px;
@@ -23,7 +24,9 @@
     border-radius: 10px;
   }
   select {
-      padding-right: 1.5rem; /* give space for arrow */
+    font-family: Poppins;
+    
+  padding-right: 1.5rem; /* give space for arrow */
   appearance: none; /* hides default arrow in some browsers */
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -45,7 +48,7 @@
 }
 
 select:hover {
-  border-color: #00f2fe;
+  border-color: #242828;
 }
 .settings{
   display: flex;
@@ -64,4 +67,28 @@ select:hover {
   border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+/* Scrollbar styling for dropdowns */
+select::-webkit-scrollbar {
+    width: 8px;
+}
+
+select::-webkit-scrollbar-track {
+    background: #1b1b1b; /* match your theme background */
+    border-radius: 5px;
+}
+
+select::-webkit-scrollbar-thumb {
+    background: #555; /* medium gray for contrast */
+    border-radius: 5px;
+}
+
+select::-webkit-scrollbar-thumb:hover {
+    background: #888; /* lighter gray on hover */
+}
+
+/* Firefox scrollbar styling for dropdowns */
+select {
+    scrollbar-width: thin;
+    scrollbar-color: #555 #1b1b1b;
 }

@@ -3,18 +3,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #1e1e2f; /* LeetCode dark background */
+    background-color: #1b1b1b;
     flex-direction: column;
+    padding: 2%;
 }
 
 .card {
-    width: 100%;
+    width: 90%;
     max-width: 24rem;
-    background-color: #212121; /* Slightly lighter card background */
-    border: 1px solid #3a3a4d; /* subtle border */
-    padding: 1.5rem;
+    background-color: #232323;
+    border: 1px solid #2a2a2a;
+    padding: 2%;
     border-radius: 8px;
 }
+
 
 .cardHeader {
     display: flex;
@@ -29,7 +31,9 @@
 }
 
 .image {
-    width: 200px;
+    width: 20vw; /* scales with screen size */
+    max-width: 200px;
+    min-width: 120px;
 }
 
 .form {
@@ -45,9 +49,9 @@
 }
 
 .input {
-    background-color: #2c2c3f;
-    border: 1px solid #444454;
-    color: #dcdcdc;
+    background-color: #2a2a2a; /* slightly lighter/darker variation */
+    border: 1px solid #333333;
+    color: #e0e0e0;
     padding: 0.75rem;
     border-radius: 5px;
     font-size: 1rem;
@@ -55,7 +59,7 @@
 
 .button {
     width: 100%;
-    background-color: #0faeff;
+    background-color: #1a73e8; /* keeping bright tone consistent */
     font-family: Poppins;
     color: white;
     padding: 0.75rem;
@@ -66,23 +70,23 @@
 }
 
 .button:hover {
-    background-color: #00c0ff;
+    background-color: #1666c1;
 }
 
 .text {
     text-align: center;
     font-size: 0.875rem;
-    color: #dcdcdc;
+    color: #cccccc;
 }
 
 .link {
-    color: #0faeff;
+    color: #1a73e8;
     text-decoration: none;
     cursor: pointer;
 }
 
 .link:hover {
-    color: #00c0ff;
+    color: #1666c1;
 }
 
 @media (max-width: 768px) {
@@ -101,7 +105,7 @@
     }
 
     .image {
-        width: 150px; /* Reduced size for smaller screens */
+        width: 150px;
     }
 
     .input {
